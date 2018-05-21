@@ -1352,6 +1352,7 @@ describe('BrowserWindow module', () => {
           show: false,
           webPreferences: {
             sandbox: true,
+            inheritPreload: true,
             preload: preload
           }
         })
@@ -1529,6 +1530,7 @@ describe('BrowserWindow module', () => {
         w = new BrowserWindow({
           show: false,
           webPreferences: {
+            inheritPreload: true,
             preload: preload,
             sandbox: true
           }

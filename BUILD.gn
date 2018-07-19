@@ -645,7 +645,6 @@ if (is_mac) {
         "comctl32.lib",
         "uiautomationcore.lib",
         "wtsapi32.lib",
-        "dwmapi.lib",
       ]
 
       configs += [ "//build/config/win:windowed" ]

@@ -379,6 +379,10 @@ jobs:
              cd src
              (cd electron/spec && npm i --nodedir=../../third_party/electron_node)
              ./out/Default/electron electron/spec --ci
+      - store_test_results:
+          path: junit
+      - store_artifacts:
+          path: junit
       - <<: *notify-slack-failure
       - <<: *notify-slack-success
 

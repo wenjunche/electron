@@ -197,7 +197,7 @@ static_library("electron_lib") {
     "//printing",
     "//services/device/wake_lock/power_save_blocker",  # TODO: this requires a visibility patch to chromium src
     "//skia",
-    "//third_party/WebKit/public:blink",
+    "//third_party/blink/public:blink",
     "//third_party/boringssl",
     "//third_party/leveldatabase",
     "//third_party/libyuv",
@@ -214,7 +214,7 @@ static_library("electron_lib") {
 
     # TODO(nornagon): replace usage of SchemeRegistry by an actually exported
     # API of blink, then delete this include dir.
-    "//third_party/WebKit/Source",
+    "//third_party/blink/renderer",
   ]
 
   defines = []
@@ -609,7 +609,7 @@ if (is_mac) {
       "//chrome:packed_resources",
       "//content/shell:copy_shell_resources",
       "//content/shell:pak",
-      "//third_party/WebKit/public:image_resources",
+      "//third_party/blink/public:image_resources",
       "//ui/strings",
       "//content:sandbox_helper_win",
     ]

@@ -18,7 +18,7 @@
 #include "content/public/renderer/render_frame.h"
 #include "native_mate/dictionary.h"
 #include "third_party/blink/public/web/web_document.h"
-#include "third_party/blink/public/web/web_kit.h"
+#include "third_party/blink/public/web/blink.h"
 
 #include "atom/common/node_includes.h"
 #include "atom_natives.h"  // NOLINT: This file is generated with js2c

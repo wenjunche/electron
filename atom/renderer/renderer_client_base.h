@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "content/public/renderer/content_renderer_client.h"
-#include "third_party/WebKit/public/web/WebLocalFrame.h"
+#include "third_party/blink/public/web/web_local_frame.h"
 
 namespace atom {
 
@@ -48,6 +48,7 @@ class RendererClientBase : public content::ContentRendererClient {
                             blink::WebPlugin** plugin) override;
   content::BrowserPluginDelegate* CreateBrowserPluginDelegate(
       content::RenderFrame* render_frame,
+      const content::WebPluginInfo& info,
       const std::string& mime_type,
       const GURL& original_url) override;
   void AddSupportedKeySystems(

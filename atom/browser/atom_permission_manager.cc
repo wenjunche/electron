@@ -213,11 +213,7 @@ AtomPermissionManager::GetPermissionStatusForFrame(
     content::PermissionType permission,
     content::RenderFrameHost* render_frame_host,
     const GURL& requesting_origin) {
-  return GetPermissionStatus(
-      permission, requesting_origin,
-      content::WebContents::FromRenderFrameHost(render_frame_host)
-          ->GetLastCommittedURL()
-          .GetOrigin());
+  return blink::mojom::PermissionStatus::GRANTED;
 }
 
 }  // namespace atom

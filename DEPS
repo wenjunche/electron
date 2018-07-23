@@ -2,7 +2,7 @@ vars = {
   'chromium_version':
     '67.0.3396.99',
   'libchromiumcontent_revision':
-    '262281a991091d3a4b7761adedf9a8e7904c22d9',
+    '0375f08b8e972169c3896877f3df214b89ef04fd',
   'node_version':
     'v10.2.0-35-g4879332def',
 

@@ -4,15 +4,28 @@ Follow the guidelines below for building Electron with the experimental GN
 build.
 
 > **NOTE**: The GN build system is in _experimental_ status, and currently only
-> works on macOS and Linux, in debug mode, as a component build.
+> works on macOS, Linux and Windows.
 
 ## Prerequisites
 
-See the [macOS](build-instructions-osx.md#prerequisites) or
-[Linux](build-instructions-linux.md#prerequisites) build instructions for the
-requirements for your platform. In addition, you'll need to install
-[`depot_tools`][depot-tools], the toolset used for fetching Chromium and its
-dependencies.
+Check the build prerequisites for your platform before proceeding
+
+  * [macOS](build-instructions-osx.md#prerequisites)
+  * [Linux](build-instructions-linux.md#prerequisites)
+  * [Windows](build-instructions-windows.md#prerequisites)
+
+## Install `depot_tools`
+
+You'll need to install [`depot_tools`][depot-tools], the toolset
+used for fetching Chromium and its dependencies.
+
+Also, on windows open:
+
+`Control Panel → System and Security → System → Advanced system settings`
+
+and add a system variable `DEPOT_TOOLS_WIN_TOOLCHAIN` with value `0`.
+This tells `depot_tools` to use your locally installed
+version of Visual Studio (by default, `depot_tools` will try to use a google-internal version).
 
 [depot-tools]: http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up
 
@@ -38,12 +51,51 @@ $ gclient sync --with_branch_heads --with_tags
 ```sh
 $ cd src
 $ export CHROMIUM_BUILDTOOLS_PATH=`pwd`/buildtools
-$ gn gen out/Default --args='root_extra_deps=["//electron"] is_electron_build=true is_component_build=true use_jumbo_build=true v8_promise_internal_field_count=1 v8_typed_array_max_size_in_heap=0'
+$ gn gen out/Default --args='target_os="mac"'
 ```
 
-This will generate all the ninja files needed for the build. You shouldn't have
-to run `gn gen` again—if you want to change the build arguments you can run `gn
-args out/Default` to bring up an editor.
+This will generate a build directory `out/Default` under `src/` with
+default build configuration. You can replace `Default` with another name,
+but it should be a subdirectory of `out`. Here `target_os`
+indicates the primary operating system used for the build, you can run
+`gn help target_os` to get list of possible values. Also, to know the list
+of available configuration options, run `gn args out/Default --list`.
+To build `electron` we need some additional arguments depending on the build,
+which are specified below. Also you shouldn't have to run `gn gen` again—if
+you want to change the build arguments, you can run `gn args out/Default` to
+bring up an editor.
+
+* #### GN args for Debug/Component build of Electron:
+
+```gn
+root_extra_deps = [ "//electron" ]
+is_electron_build = true
+is_electron_gn_build = true
+is_component_build = true
+use_jumbo_build = true
+is_debug = true
+enable_widevine = true
+is_component_ffmpeg = true
+ffmpeg_branding = "Chrome"
+v8_promise_internal_field_count = 1
+v8_typed_array_max_size_in_heap = 0
+```
+
+* #### GN args for Release/Non-Component build of Electron:
+
+```gn
+root_extra_deps = [ "//electron" ]
+is_electron_build = true
+is_electron_gn_build = true
+is_component_build = false
+use_jumbo_build = true
+is_official_build = true
+enable_widevine = true
+is_component_ffmpeg = true
+ffmpeg_branding = "Chrome"
+v8_promise_internal_field_count = 1
+v8_typed_array_max_size_in_heap = 0
+```
 
 To build, run `ninja` with the `electron:electron_app` target:
 
@@ -87,10 +139,14 @@ this document :)
 ## Tests
 
 To run the tests, you'll first need to build the test modules against the
-same version of Node.js that was built as part of the build process.
+same version of Node.js that was built as part of the build process. To
+generate build headers for the modules to compile against, run the following
+under `src/` directory.
 
 ```sh
-$ (cd electron/spec && npm i --nodedir=../../third_party/electron_node)
+$ ninja -C out/Default electron/build/node:headers
+# Install the test modules with the generated headers
+$ (cd electron/spec && npm i --nodedir=../../out/Default/gen/node_headers)
 ```
 
 Then, run Electron with `electron/spec` as the argument:
